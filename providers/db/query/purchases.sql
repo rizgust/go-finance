@@ -1,5 +1,5 @@
 INSERT INTO purchases (
-    onwer_id, 
+    ownerr_id, 
     user_id, 
     "number", 
     ap_id, 

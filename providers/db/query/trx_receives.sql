@@ -1,5 +1,5 @@
 INSERT INTO trx_receives (
-    onwer_id, 
+    ownerr_id, 
     user_id, 
     "number", 
     amount, 
@@ -33,7 +33,7 @@ OFFSET $3;
 
 -- name: UpdateTrxReceive :one
 UPDATE trx_receives
-SET onwer_id=$2, 
+SET ownerr_id=$2, 
     user_id=$3, 
     "number"=$4, 
     amount=$5, 

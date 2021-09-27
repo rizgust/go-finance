@@ -1,5 +1,5 @@
 INSERT INTO invoices (
-    onwer_id, 
+    ownerr_id, 
     user_id, 
     "number", 
     ar_id, 

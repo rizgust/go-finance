@@ -1,5 +1,5 @@
 INSERT INTO general_ledger_details (
-    onwer_id, 
+    ownerr_id, 
     general_ledger_id, 
     account_id, 
     debit, 

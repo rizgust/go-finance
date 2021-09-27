@@ -1,5 +1,5 @@
 INSERT INTO account_receivables (
-    onwer_id, 
+    ownerr_id, 
     code, 
     "name", 
     description, 

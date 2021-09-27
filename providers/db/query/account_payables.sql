@@ -1,5 +1,5 @@
 INSERT INTO account_payables (
-    onwer_id, 
+    ownerr_id, 
     code, 
     "name", 
     description, 

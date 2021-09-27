@@ -1,6 +1,6 @@
 CREATE TABLE "m_chart_of_accounts" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "code" VARCHAR(20) NOT NULL,
    "name" varchar(50) NOT NULL,
    "description" varchar(100),
@@ -56,7 +56,7 @@ CREATE TABLE "m_virtual_accounts" (
 
 CREATE TABLE "m_discounts" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "code" VARCHAR(20),
    "name" VARCHAR(50) NOT NULL,
    "description" VARCHAR(100),
@@ -76,7 +76,7 @@ CREATE TABLE "m_discounts" (
 
 CREATE TABLE "m_book_periods" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "code" VARCHAR(20),
    "name" varchar(50) NOT NULL,
    "description" varchar(100),
@@ -94,7 +94,7 @@ CREATE TABLE "m_book_periods" (
 
 CREATE TABLE "account_payables" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "code" VARCHAR(20) NOT NULL,
    "name" varchar(50) NOT NULL,
    "description" varchar(100),
@@ -113,7 +113,7 @@ CREATE TABLE "account_payables" (
 
 CREATE TABLE "account_receiveables" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "code" VARCHAR(20) NOT NULL,
    "name" varchar(50) NOT NULL,
    "description" varchar(100),
@@ -133,7 +133,7 @@ CREATE TABLE "account_receiveables" (
 
 CREATE TABLE "invoices" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "user_id" INT NOT NULL,
    "number" VARCHAR(20) NOT NULL,
    "ar_id" INT NOT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE "invoices" (
 
 CREATE TABLE "trx_receives" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "user_id" INT NOT NULL,
    "number" VARCHAR(20),
    "amount" MONEY NOT NULL,
@@ -221,7 +221,7 @@ CREATE TABLE "trx_receive_details" (
 
 CREATE TABLE "journals" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "number" VARCHAR(50) NOT NULL,
    "date" DATE NOT NULL,
    "general_ledger_id" INT,
@@ -258,7 +258,7 @@ CREATE TABLE "trx_wallets" (
 
 CREATE TABLE "trx_bank_transfers" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "user_id" INT NOT NULL,
    "bank_id" INT NOT NULL,
    "number" VARCHAR(20),
@@ -281,7 +281,7 @@ CREATE TABLE "trx_bank_transfers" (
 
 CREATE TABLE "account_receiveable_rules" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "ar_id" INT NOT NULL,
    "period_id" INT NOT NULL,
    "rule" JSON NOT NULL,
@@ -296,7 +296,7 @@ CREATE TABLE "account_receiveable_rules" (
 
 CREATE TABLE "general_ledgers" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "number" VARCHAR(50) NOT NULL,
    "status" SMALLINT NOT NULL,
    "date" DATE NOT NULL,
@@ -311,7 +311,7 @@ CREATE TABLE "general_ledgers" (
 
 CREATE TABLE "journal_details" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "account_id" BIGINT NOT NULL,
    "journal_id" INT NOT NULL,
    "amount" MONEY NOT NULL,
@@ -328,7 +328,7 @@ CREATE TABLE "journal_details" (
 
 CREATE TABLE "account_payable_rules" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "ap_id" INT NOT NULL,
    "period_id" INT NOT NULL,
    "rule" JSONB NOT NULL,
@@ -343,7 +343,7 @@ CREATE TABLE "account_payable_rules" (
 
 CREATE TABLE "trx_expenses" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "user_id" INT NOT NULL,
    "number" VARCHAR(20),
    "amount" MONEY NOT NULL,
@@ -376,7 +376,7 @@ CREATE TABLE "trx_expense_details" (
 
 CREATE TABLE "purchases" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "user_id" INT NOT NULL,
    "number" VARCHAR(20) NOT NULL,
    "ap_id" INT NOT NULL,
@@ -400,7 +400,7 @@ CREATE TABLE "purchases" (
 
 CREATE TABLE "general_ledger_details" (
    "id" SERIAL NOT NULL,
-   "onwer_id" INT NOT NULL,
+   "owner_id" INT NOT NULL,
    "general_ledger_id" INT NOT NULL,
    "account_id" INT NOT NULL,
    "debit" MONEY NOT NULL,
