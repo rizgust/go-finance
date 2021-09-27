@@ -1,0 +1,47 @@
+INSERT INTO invoices (
+    owner_id, 
+    user_id, 
+    code, 
+    "name", 
+    alias, 
+    balance, 
+    account_id, 
+    other_info, 
+    allow_minus,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+) RETURNING *;
+
+-- name: GetWallet :one
+SELECT * FROM invoices
+WHERE id = $1 LIMIT 1;
+
+-- name: GetWalletForUpdate :one
+SELECT * FROM invoices
+WHERE id = $1 LIMIT 1
+FOR NO KEY UPDATE;
+
+-- name: ListWallets :many
+SELECT * FROM invoices
+WHERE owner_id = $1
+ORDER BY id
+LIMIT $2
+OFFSET $3;
+
+-- name: UpdateWallet :one
+UPDATE invoices
+SET owner_id=$2, 
+    code=$3, 
+    "name"=$4, 
+    alias=$5,
+    updated_at=now(),
+    updated_by=$6
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteWallet :exec
+DELETE FROM invoices
+WHERE id = $1;
