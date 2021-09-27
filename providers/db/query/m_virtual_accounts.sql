@@ -28,11 +28,10 @@ OFFSET $3;
 -- name: UpdateMVirtualAccount :one
 UPDATE m_virtual_accounts
 SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+    bank_id=$3, 
+    "number"=$4,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$5
 WHERE id = $1
 RETURNING *;
 

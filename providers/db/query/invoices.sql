@@ -11,7 +11,6 @@ INSERT INTO invoices (
     additional_info, 
     payment_id, 
     discount_id, 
-    created_at,
     period_id, 
     class_program_id, 
     class_level_id, 
@@ -28,7 +27,7 @@ INSERT INTO invoices (
     updated_by
 ) 
 VALUES(
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27
 ) RETURNING *;
 
 -- name: GetInvoice :one
@@ -50,11 +49,31 @@ OFFSET $3;
 -- name: UpdateInvoice :one
 UPDATE invoices
 SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+    user_id=$3, 
+    "number"=$4, 
+    ar_id=$5, 
+    status=$6, 
+    amount=$7, 
+    amount_paid=$8, 
+    "date"=$9, 
+    due_date=$10, 
+    additional_info=$11, 
+    payment_id=$12, 
+    discount_id=$13,
+    period_id=$14, 
+    class_program_id=$15, 
+    class_level_id=$16, 
+    class_specialization_id=$18, 
+    male=$19, 
+    recurring_type=$20, 
+    recurring_period=$21, 
+    installment=$22, 
+    mutation=$23, 
+    boarding=$24, 
+    admission_line_id=$25, 
+    admission_batch_id=$26,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$27
 WHERE id = $1
 RETURNING *;
 

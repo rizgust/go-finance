@@ -34,9 +34,12 @@ UPDATE m_book_periods
 SET owner_id=$2, 
     code=$3, 
     "name"=$4, 
-    alias=$5,
+    description=$5, 
+    status=$6, 
+    start_date=$7, 
+    end_date=$8, 
     updated_at=now(),
-    updated_by=$6
+    updated_by=$9
 WHERE id = $1
 RETURNING *;
 

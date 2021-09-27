@@ -36,9 +36,14 @@ UPDATE m_discounts
 SET owner_id=$2, 
     code=$3, 
     "name"=$4, 
-    alias=$5,
+    description=$5, 
+    is_active=$6, 
+    value=$7, 
+    is_percent=$8, 
+    start_date=$9, 
+    end_date=$10,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$11
 WHERE id = $1
 RETURNING *;
 

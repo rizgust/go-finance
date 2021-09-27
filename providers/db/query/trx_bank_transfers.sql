@@ -39,11 +39,21 @@ OFFSET $3;
 -- name: UpdateTrxBankTransfer :one
 UPDATE trx_bank_transfers
 SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+    user_id=$3, 
+    bank_id=$4, 
+    "number"=$5, 
+    "date"=$6, 
+    status=$7, 
+    amount=$8, 
+    description=$9, 
+    dest_model=$10, 
+    dest_model_id=$11, 
+    account_owner=$12, 
+    account_number=$13, 
+    additional_info=$14, 
+    trx_receives_id=$15,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$16
 WHERE id = $1
 RETURNING *;
 

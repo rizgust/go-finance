@@ -33,12 +33,17 @@ OFFSET $3;
 
 -- name: UpdateTrxReceive :one
 UPDATE trx_receives
-SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+SET onwer_id=$2, 
+    user_id=$3, 
+    "number"=$4, 
+    amount=$5, 
+    "date"=$6, 
+    status=$7, 
+    description=$8,
+    payment_method=$9,
+    journal_id=$10,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$11
 WHERE id = $1
 RETURNING *;
 

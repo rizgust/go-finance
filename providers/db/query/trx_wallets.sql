@@ -32,12 +32,16 @@ OFFSET $3;
 
 -- name: UpdateTrxWallet :one
 UPDATE trx_wallets
-SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+SET wallet_id=$2, 
+    amount=$3, 
+    balance_before=$4, 
+    balance=$5, 
+    dest_model=$6, 
+    dest_model_id=$7, 
+    trx_receives_id=$8, 
+    debit=$9,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$10
 WHERE id = $1
 RETURNING *;
 

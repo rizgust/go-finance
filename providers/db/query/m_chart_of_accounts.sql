@@ -33,9 +33,11 @@ UPDATE m_chart_of_accounts
 SET owner_id=$2, 
     code=$3, 
     "name"=$4, 
-    alias=$5,
+    description=$5, 
+    category=$6, 
+    "level"=$7,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$8
 WHERE id = $1
 RETURNING *;
 

@@ -30,12 +30,14 @@ OFFSET $3;
 
 -- name: UpdateJournalDetail :one
 UPDATE journal_details
-SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+SET onwer_id=$2, 
+    account_id=$3, 
+    journal_id=$4, 
+    amount=$5, 
+    reff_mode=$6,
+    reff_model_id=$7,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$8
 WHERE id = $1
 RETURNING *;
 

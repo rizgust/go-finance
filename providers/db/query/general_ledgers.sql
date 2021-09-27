@@ -32,11 +32,14 @@ OFFSET $3;
 -- name: UpdateGeneralLedgerDetail :one
 UPDATE general_ledger_details
 SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+    general_ledger_id=$3, 
+    account_id=$4, 
+    debit=$5, 
+    credit=$6, 
+    balance_before=$7, 
+    balance=$8, 
     updated_at=now(),
-    updated_by=$6
+    updated_by=$9
 WHERE id = $1
 RETURNING *;
 

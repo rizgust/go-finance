@@ -34,11 +34,16 @@ OFFSET $3;
 -- name: UpdateWallet :one
 UPDATE invoices
 SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+    user_id=$3, 
+    code=$4, 
+    "name"=$5, 
+    alias=$6, 
+    balance=$7, 
+    account_id=$8, 
+    other_info=$9, 
+    allow_minus=$10,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$11
 WHERE id = $1
 RETURNING *;
 

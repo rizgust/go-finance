@@ -23,19 +23,21 @@ FOR NO KEY UPDATE;
 
 -- name: ListTrxExpenseDetails :many
 SELECT * FROM trx_expense_details
-WHERE owner_id = $1
+WHERE trx_expenses_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
 
 -- name: UpdateTrxExpenseDetail :one
 UPDATE trx_expense_details
-SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+SET trx_expenses_id=$2, 
+    amount=$3, 
+    is_source=$4, 
+    account_id=$5, 
+    model=$6, 
+    model_id=$7,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$8
 WHERE id = $1
 RETURNING *;
 

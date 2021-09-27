@@ -34,11 +34,16 @@ OFFSET $3;
 -- name: UpdateJournal :one
 UPDATE journals
 SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+    "number"=$3, 
+    "date"=$4, 
+    general_ledger_id=$5, 
+    status=$6, 
+    amount=$7, 
+    description=$8, 
+    reff_model=$9, 
+    reff_model_id=$10,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$11
 WHERE id = $1
 RETURNING *;
 

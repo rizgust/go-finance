@@ -37,12 +37,21 @@ OFFSET $3;
 
 -- name: UpdatePurchase :one
 UPDATE purchases
-SET owner_id=$2, 
-    code=$3, 
-    "name"=$4, 
-    alias=$5,
+SET owner_id=$2,  
+    user_id=$3, 
+    "number"=$4, 
+    ar_id=$5, 
+    status=$6, 
+    amount=$7, 
+    amount_paid=$8, 
+    "date"=$9, 
+    due_date=$10, 
+    additional_info=$11, 
+    period_id=$12, 
+    expense_id=$13, 
+    discount_id=$14,
     updated_at=now(),
-    updated_by=$6
+    updated_by=$15
 WHERE id = $1
 RETURNING *;
 
