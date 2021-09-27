@@ -258,6 +258,7 @@ CREATE TABLE "trx_wallets" (
 
 CREATE TABLE "trx_bank_transfers" (
    "id" SERIAL NOT NULL,
+   "onwer_id" INT NOT NULL,
    "user_id" INT NOT NULL,
    "bank_id" INT NOT NULL,
    "number" VARCHAR(20),
