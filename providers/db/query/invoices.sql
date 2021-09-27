@@ -27,7 +27,7 @@ INSERT INTO invoices (
     updated_by
 ) 
 VALUES(
-    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26
 ) RETURNING *;
 
 -- name: GetInvoice :one
@@ -63,17 +63,17 @@ SET owner_id=$2,
     period_id=$14, 
     class_program_id=$15, 
     class_level_id=$16, 
-    class_specialization_id=$18, 
-    male=$19, 
-    recurring_type=$20, 
-    recurring_period=$21, 
-    installment=$22, 
-    mutation=$23, 
-    boarding=$24, 
-    admission_line_id=$25, 
-    admission_batch_id=$26,
+    class_specialization_id=$17, 
+    male=$18, 
+    recurring_type=$19, 
+    recurring_period=$20, 
+    installment=$21, 
+    mutation=$22, 
+    boarding=$23, 
+    admission_line_id=$24, 
+    admission_batch_id=$25,
     updated_at=now(),
-    updated_by=$27
+    updated_by=$26
 WHERE id = $1
 RETURNING *;
 

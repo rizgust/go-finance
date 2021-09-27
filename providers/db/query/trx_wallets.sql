@@ -25,7 +25,7 @@ FOR NO KEY UPDATE;
 
 -- name: ListTrxWallets :many
 SELECT * FROM trx_wallets
-WHERE owner_id = $1
+WHERE wallet_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;

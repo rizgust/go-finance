@@ -1,4 +1,4 @@
-INSERT INTO account_receivables (
+INSERT INTO account_receiveables (
     owner_id, 
     code, 
     "name", 
@@ -14,24 +14,24 @@ VALUES(
     $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
 ) RETURNING *;
 
--- name: GetAccountReceivable :one
-SELECT * FROM account_receivables
+-- name: GetAccountReceiveable :one
+SELECT * FROM account_receiveables
 WHERE id = $1 LIMIT 1;
 
--- name: GetAccountReceivableForUpdate :one
-SELECT * FROM account_receivables
+-- name: GetAccountReceiveableForUpdate :one
+SELECT * FROM account_receiveables
 WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE;
 
--- name: ListAccountReceivables :many
-SELECT * FROM account_receivables
+-- name: ListAccountReceiveables :many
+SELECT * FROM account_receiveables
 WHERE owner_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
 
--- name: UpdateAccountReceivable :one
-UPDATE account_receivables
+-- name: UpdateAccountReceiveable :one
+UPDATE account_receiveables
 SET owner_id=$2, 
     code=$3, 
     "name"=$4, 
@@ -45,6 +45,6 @@ SET owner_id=$2,
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteAccountReceivable :exec
-DELETE FROM account_receivables
+-- name: DeleteAccountReceiveable :exec
+DELETE FROM account_receiveables
 WHERE id = $1;

@@ -5,7 +5,7 @@ INSERT INTO m_book_periods (
     description, 
     status, 
     start_date, 
-    end_date
+    end_date,
     created_by,
     updated_by
 ) 
@@ -13,23 +13,23 @@ VALUES(
     $1, $2, $3, $4, $5, $6, $7, $8, $9
 ) RETURNING *;
 
--- name: GetInvoice :one
+-- name: GetMBookPeriod :one
 SELECT * FROM m_book_periods
 WHERE id = $1 LIMIT 1;
 
--- name: GetInvoiceForUpdate :one
+-- name: GetMBookPeriodForUpdate :one
 SELECT * FROM m_book_periods
 WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE;
 
--- name: ListInvoices :many
+-- name: ListMBookPeriods :many
 SELECT * FROM m_book_periods
 WHERE owner_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
 
--- name: UpdateInvoice :one
+-- name: UpdateMBookPeriod :one
 UPDATE m_book_periods
 SET owner_id=$2, 
     code=$3, 
@@ -43,6 +43,6 @@ SET owner_id=$2,
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteInvoice :exec
+-- name: DeleteMBookPeriod :exec
 DELETE FROM m_book_periods
 WHERE id = $1;

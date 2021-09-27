@@ -1,4 +1,4 @@
-INSERT INTO account_receivable_rules (
+INSERT INTO account_receiveable_rules (
     owner_id, 
     ar_id, 
     period_id,
@@ -10,24 +10,24 @@ VALUES(
     $1, $2, $3, $4, $5, $6
 ) RETURNING *;
 
--- name: GetAccountReceivableRule :one
-SELECT * FROM account_receivable_rules
+-- name: GetAccountReceiveableRule :one
+SELECT * FROM account_receiveable_rules
 WHERE id = $1 LIMIT 1;
 
--- name: GetAccountReceivableRuleForUpdate :one
-SELECT * FROM account_receivable_rules
+-- name: GetAccountReceiveableRuleForUpdate :one
+SELECT * FROM account_receiveable_rules
 WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE;
 
--- name: ListAccountReceivableRules :many
-SELECT * FROM account_receivable_rules
+-- name: ListAccountReceiveableRules :many
+SELECT * FROM account_receiveable_rules
 WHERE owner_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
 
--- name: UpdateAccountReceivableRule :one
-UPDATE account_receivable_rules
+-- name: UpdateAccountReceiveableRule :one
+UPDATE account_receiveable_rules
 SET owner_id=$2, 
     ar_id=$3, 
     period_id=$4, 
@@ -37,6 +37,6 @@ SET owner_id=$2,
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteAccountReceivableRule :exec
-DELETE FROM account_receivable_rules
+-- name: DeleteAccountReceiveableRule :exec
+DELETE FROM account_receiveable_rules
 WHERE id = $1;

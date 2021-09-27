@@ -40,7 +40,7 @@ UPDATE purchases
 SET owner_id=$2,  
     user_id=$3, 
     "number"=$4, 
-    ar_id=$5, 
+    ap_id=$5, 
     status=$6, 
     amount=$7, 
     amount_paid=$8, 

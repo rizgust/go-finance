@@ -13,23 +13,23 @@ VALUES(
     $1, $2, $3, $4, $5, $6, $7, $8, $9
 ) RETURNING *;
 
--- name: GetGeneralLedgerDetail :one
+-- name: GetGeneralLedger :one
 SELECT * FROM general_ledger_details
 WHERE id = $1 LIMIT 1;
 
--- name: GetGeneralLedgerDetailForUpdate :one
+-- name: GetGeneralLedgerForUpdate :one
 SELECT * FROM general_ledger_details
 WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE;
 
--- name: ListGeneralLedgerDetails :many
+-- name: ListGeneralLedgers :many
 SELECT * FROM general_ledger_details
 WHERE owner_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
 
--- name: UpdateGeneralLedgerDetail :one
+-- name: UpdateGeneralLedger :one
 UPDATE general_ledger_details
 SET owner_id=$2, 
     general_ledger_id=$3, 
@@ -43,6 +43,6 @@ SET owner_id=$2,
 WHERE id = $1
 RETURNING *;
 
--- name: DeleteGeneralLedgerDetail :exec
+-- name: DeleteGeneralLedger :exec
 DELETE FROM general_ledger_details
 WHERE id = $1;

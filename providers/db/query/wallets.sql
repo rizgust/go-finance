@@ -1,4 +1,4 @@
-INSERT INTO invoices (
+INSERT INTO wallets (
     owner_id, 
     user_id, 
     code, 
@@ -16,23 +16,23 @@ VALUES(
 ) RETURNING *;
 
 -- name: GetWallet :one
-SELECT * FROM invoices
+SELECT * FROM wallets
 WHERE id = $1 LIMIT 1;
 
 -- name: GetWalletForUpdate :one
-SELECT * FROM invoices
+SELECT * FROM wallets
 WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE;
 
 -- name: ListWallets :many
-SELECT * FROM invoices
+SELECT * FROM wallets
 WHERE owner_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
 
 -- name: UpdateWallet :one
-UPDATE invoices
+UPDATE wallets
 SET owner_id=$2, 
     user_id=$3, 
     code=$4, 
@@ -48,5 +48,5 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteWallet :exec
-DELETE FROM invoices
+DELETE FROM wallets
 WHERE id = $1;
