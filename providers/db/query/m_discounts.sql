@@ -1,5 +1,5 @@
 INSERT INTO m_discounts (
-    ownerr_id, 
+    owner_id, 
     code, 
     "name", 
     description, 

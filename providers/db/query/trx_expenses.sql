@@ -1,5 +1,5 @@
 INSERT INTO trx_expenses (
-    ownerr_id, 
+    owner_id, 
     user_id, 
     "number", 
     amount, 
@@ -33,7 +33,7 @@ OFFSET $3;
 
 -- name: UpdateTrxExpense :one
 UPDATE trx_expenses
-SET ownerr_id=$2, 
+SET owner_id=$2, 
     user_id=$3, 
     "number"=$4, 
     amount=$5, 

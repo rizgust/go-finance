@@ -1,5 +1,5 @@
 INSERT INTO journals (
-    ownerr_id, 
+    owner_id, 
     "number", 
     "date", 
     general_ledger_id, 

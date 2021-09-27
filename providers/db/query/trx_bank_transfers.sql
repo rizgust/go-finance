@@ -1,5 +1,5 @@
 INSERT INTO trx_bank_transfers (
-    ownerr_id, 
+    owner_id, 
     user_id, 
     bank_id, 
     "number", 

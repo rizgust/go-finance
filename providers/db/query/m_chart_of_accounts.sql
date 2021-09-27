@@ -1,5 +1,5 @@
 INSERT INTO m_chart_of_accounts (
-    ownerr_id, 
+    owner_id, 
     code, 
     "name", 
     description, 

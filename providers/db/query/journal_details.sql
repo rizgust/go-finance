@@ -1,5 +1,5 @@
 INSERT INTO journal_details (
-    ownerr_id, 
+    owner_id, 
     account_id, 
     journal_id, 
     amount, 
@@ -30,7 +30,7 @@ OFFSET $3;
 
 -- name: UpdateJournalDetail :one
 UPDATE journal_details
-SET ownerr_id=$2, 
+SET owner_id=$2, 
     account_id=$3, 
     journal_id=$4, 
     amount=$5, 
