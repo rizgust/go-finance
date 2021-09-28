@@ -6,3 +6,6 @@ migratedown:
 
 sqlgen:
 	~/go/bin/sqlc generate
+
+server:
+	go run main.go
