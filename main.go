@@ -6,8 +6,8 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/rizgust/go-finance/api"
-	db "github.com/rizgust/go-finance/db/sqlc"
-	"github.com/rizgust/go-finance/util"
+	db "github.com/rizgust/go-finance/providers/db/sqlc"
+	"github.com/rizgust/go-finance/utils"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	}
 
 	store := db.NewStore(conn)
-	server, err := api.NewServer(config, store)
+	server := api.NewServer(store)
 	if err != nil {
 		log.Fatal("cannot create server:", err)
 	}
