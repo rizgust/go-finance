@@ -8,6 +8,75 @@ import (
 	"database/sql"
 )
 
+const createMDiscount = `-- name: CreateMDiscount :one
+INSERT INTO m_discounts (
+    owner_id, 
+    code, 
+    "name", 
+    description, 
+    is_active, 
+    value, 
+    is_percent, 
+    start_date, 
+    end_date,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+) RETURNING id, owner_id, code, name, description, is_active, value, is_percent, start_date, end_date, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateMDiscountParams struct {
+	OwnerID     int32          `json:"owner_id"`
+	Code        sql.NullString `json:"code"`
+	Name        string         `json:"name"`
+	Description sql.NullString `json:"description"`
+	IsActive    bool           `json:"is_active"`
+	Value       string         `json:"value"`
+	IsPercent   bool           `json:"is_percent"`
+	StartDate   sql.NullTime   `json:"start_date"`
+	EndDate     sql.NullTime   `json:"end_date"`
+	CreatedBy   int32          `json:"created_by"`
+	UpdatedBy   int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateMDiscount(ctx context.Context, arg CreateMDiscountParams) (MDiscount, error) {
+	row := q.db.QueryRowContext(ctx, createMDiscount,
+		arg.OwnerID,
+		arg.Code,
+		arg.Name,
+		arg.Description,
+		arg.IsActive,
+		arg.Value,
+		arg.IsPercent,
+		arg.StartDate,
+		arg.EndDate,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i MDiscount
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Code,
+		&i.Name,
+		&i.Description,
+		&i.IsActive,
+		&i.Value,
+		&i.IsPercent,
+		&i.StartDate,
+		&i.EndDate,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteMDiscount = `-- name: DeleteMDiscount :exec
 DELETE FROM m_discounts
 WHERE id = $1

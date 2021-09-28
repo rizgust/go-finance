@@ -11,6 +11,91 @@ import (
 	"github.com/tabbed/pqtype"
 )
 
+const createPurchase = `-- name: CreatePurchase :one
+INSERT INTO purchases (
+    owner_id, 
+    user_id, 
+    "number", 
+    ap_id, 
+    status, 
+    amount, 
+    amount_paid, 
+    "date", 
+    due_date, 
+    additional_info, 
+    period_id, 
+    expense_id, 
+    discount_id,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
+) RETURNING id, owner_id, user_id, number, ap_id, status, amount, amount_paid, date, due_date, additional_info, period_id, expense_id, discount_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreatePurchaseParams struct {
+	OwnerID        int32                 `json:"owner_id"`
+	UserID         int32                 `json:"user_id"`
+	Number         string                `json:"number"`
+	ApID           int32                 `json:"ap_id"`
+	Status         int16                 `json:"status"`
+	Amount         string                `json:"amount"`
+	AmountPaid     string                `json:"amount_paid"`
+	Date           time.Time             `json:"date"`
+	DueDate        time.Time             `json:"due_date"`
+	AdditionalInfo pqtype.NullRawMessage `json:"additional_info"`
+	PeriodID       sql.NullInt32         `json:"period_id"`
+	ExpenseID      sql.NullInt32         `json:"expense_id"`
+	DiscountID     sql.NullInt32         `json:"discount_id"`
+	CreatedBy      int32                 `json:"created_by"`
+	UpdatedBy      int32                 `json:"updated_by"`
+}
+
+func (q *Queries) CreatePurchase(ctx context.Context, arg CreatePurchaseParams) (Purchase, error) {
+	row := q.db.QueryRowContext(ctx, createPurchase,
+		arg.OwnerID,
+		arg.UserID,
+		arg.Number,
+		arg.ApID,
+		arg.Status,
+		arg.Amount,
+		arg.AmountPaid,
+		arg.Date,
+		arg.DueDate,
+		arg.AdditionalInfo,
+		arg.PeriodID,
+		arg.ExpenseID,
+		arg.DiscountID,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i Purchase
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.UserID,
+		&i.Number,
+		&i.ApID,
+		&i.Status,
+		&i.Amount,
+		&i.AmountPaid,
+		&i.Date,
+		&i.DueDate,
+		&i.AdditionalInfo,
+		&i.PeriodID,
+		&i.ExpenseID,
+		&i.DiscountID,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deletePurchase = `-- name: DeletePurchase :exec
 DELETE FROM purchases
 WHERE id = $1

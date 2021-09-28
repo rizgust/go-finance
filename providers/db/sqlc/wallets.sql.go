@@ -10,6 +10,75 @@ import (
 	"github.com/tabbed/pqtype"
 )
 
+const createWallet = `-- name: CreateWallet :one
+INSERT INTO wallets (
+    owner_id, 
+    user_id, 
+    code, 
+    "name", 
+    alias, 
+    balance, 
+    account_id, 
+    other_info, 
+    allow_minus,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+) RETURNING id, owner_id, user_id, code, name, alias, balance, account_id, other_info, allow_minus, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateWalletParams struct {
+	OwnerID    int32                 `json:"owner_id"`
+	UserID     int32                 `json:"user_id"`
+	Code       string                `json:"code"`
+	Name       string                `json:"name"`
+	Alias      sql.NullString        `json:"alias"`
+	Balance    string                `json:"balance"`
+	AccountID  sql.NullInt32         `json:"account_id"`
+	OtherInfo  pqtype.NullRawMessage `json:"other_info"`
+	AllowMinus sql.NullBool          `json:"allow_minus"`
+	CreatedBy  int32                 `json:"created_by"`
+	UpdatedBy  int32                 `json:"updated_by"`
+}
+
+func (q *Queries) CreateWallet(ctx context.Context, arg CreateWalletParams) (Wallet, error) {
+	row := q.db.QueryRowContext(ctx, createWallet,
+		arg.OwnerID,
+		arg.UserID,
+		arg.Code,
+		arg.Name,
+		arg.Alias,
+		arg.Balance,
+		arg.AccountID,
+		arg.OtherInfo,
+		arg.AllowMinus,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i Wallet
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.UserID,
+		&i.Code,
+		&i.Name,
+		&i.Alias,
+		&i.Balance,
+		&i.AccountID,
+		&i.OtherInfo,
+		&i.AllowMinus,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteWallet = `-- name: DeleteWallet :exec
 DELETE FROM wallets
 WHERE id = $1

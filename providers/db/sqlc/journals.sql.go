@@ -9,6 +9,75 @@ import (
 	"time"
 )
 
+const createJournal = `-- name: CreateJournal :one
+INSERT INTO journals (
+    owner_id, 
+    "number", 
+    "date", 
+    general_ledger_id, 
+    status, 
+    amount, 
+    description, 
+    reff_model, 
+    reff_model_id,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+) RETURNING id, owner_id, number, date, general_ledger_id, status, amount, description, reff_model, reff_model_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateJournalParams struct {
+	OwnerID         int32          `json:"owner_id"`
+	Number          string         `json:"number"`
+	Date            time.Time      `json:"date"`
+	GeneralLedgerID sql.NullInt32  `json:"general_ledger_id"`
+	Status          int16          `json:"status"`
+	Amount          string         `json:"amount"`
+	Description     sql.NullString `json:"description"`
+	ReffModel       sql.NullString `json:"reff_model"`
+	ReffModelID     sql.NullInt32  `json:"reff_model_id"`
+	CreatedBy       int32          `json:"created_by"`
+	UpdatedBy       int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateJournal(ctx context.Context, arg CreateJournalParams) (Journal, error) {
+	row := q.db.QueryRowContext(ctx, createJournal,
+		arg.OwnerID,
+		arg.Number,
+		arg.Date,
+		arg.GeneralLedgerID,
+		arg.Status,
+		arg.Amount,
+		arg.Description,
+		arg.ReffModel,
+		arg.ReffModelID,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i Journal
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Number,
+		&i.Date,
+		&i.GeneralLedgerID,
+		&i.Status,
+		&i.Amount,
+		&i.Description,
+		&i.ReffModel,
+		&i.ReffModelID,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteJournal = `-- name: DeleteJournal :exec
 DELETE FROM journals
 WHERE id = $1

@@ -11,6 +11,93 @@ import (
 	"github.com/tabbed/pqtype"
 )
 
+const createTrxBankTransfer = `-- name: CreateTrxBankTransfer :one
+INSERT INTO trx_bank_transfers (
+    owner_id, 
+    user_id, 
+    bank_id, 
+    "number", 
+    "date", 
+    status, 
+    amount, 
+    description, 
+    dest_model, 
+    dest_model_id, 
+    account_owner, 
+    account_number, 
+    additional_info, 
+    trx_receives_id,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16
+) RETURNING id, owner_id, user_id, bank_id, number, date, status, amount, description, dest_model, dest_model_id, account_owner, account_number, additional_info, trx_receives_id, created_at, created_by, updated_at, updated_by
+`
+
+type CreateTrxBankTransferParams struct {
+	OwnerID        int32                 `json:"owner_id"`
+	UserID         int32                 `json:"user_id"`
+	BankID         int32                 `json:"bank_id"`
+	Number         sql.NullString        `json:"number"`
+	Date           time.Time             `json:"date"`
+	Status         int16                 `json:"status"`
+	Amount         string                `json:"amount"`
+	Description    sql.NullString        `json:"description"`
+	DestModel      sql.NullString        `json:"dest_model"`
+	DestModelID    sql.NullInt32         `json:"dest_model_id"`
+	AccountOwner   sql.NullString        `json:"account_owner"`
+	AccountNumber  sql.NullString        `json:"account_number"`
+	AdditionalInfo pqtype.NullRawMessage `json:"additional_info"`
+	TrxReceivesID  int32                 `json:"trx_receives_id"`
+	CreatedBy      int32                 `json:"created_by"`
+	UpdatedBy      int32                 `json:"updated_by"`
+}
+
+func (q *Queries) CreateTrxBankTransfer(ctx context.Context, arg CreateTrxBankTransferParams) (TrxBankTransfer, error) {
+	row := q.db.QueryRowContext(ctx, createTrxBankTransfer,
+		arg.OwnerID,
+		arg.UserID,
+		arg.BankID,
+		arg.Number,
+		arg.Date,
+		arg.Status,
+		arg.Amount,
+		arg.Description,
+		arg.DestModel,
+		arg.DestModelID,
+		arg.AccountOwner,
+		arg.AccountNumber,
+		arg.AdditionalInfo,
+		arg.TrxReceivesID,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i TrxBankTransfer
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.UserID,
+		&i.BankID,
+		&i.Number,
+		&i.Date,
+		&i.Status,
+		&i.Amount,
+		&i.Description,
+		&i.DestModel,
+		&i.DestModelID,
+		&i.AccountOwner,
+		&i.AccountNumber,
+		&i.AdditionalInfo,
+		&i.TrxReceivesID,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+	)
+	return i, err
+}
+
 const deleteTrxBankTransfer = `-- name: DeleteTrxBankTransfer :exec
 DELETE FROM trx_bank_transfers
 WHERE id = $1

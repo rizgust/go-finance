@@ -8,6 +8,63 @@ import (
 	"database/sql"
 )
 
+const createMChartOfAccount = `-- name: CreateMChartOfAccount :one
+INSERT INTO m_chart_of_accounts (
+    owner_id, 
+    code, 
+    "name", 
+    description, 
+    category, 
+    "level",
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8
+) RETURNING id, owner_id, code, name, description, category, level, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateMChartOfAccountParams struct {
+	OwnerID     int32          `json:"owner_id"`
+	Code        string         `json:"code"`
+	Name        string         `json:"name"`
+	Description sql.NullString `json:"description"`
+	Category    int16          `json:"category"`
+	Level       int16          `json:"level"`
+	CreatedBy   int32          `json:"created_by"`
+	UpdatedBy   int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateMChartOfAccount(ctx context.Context, arg CreateMChartOfAccountParams) (MChartOfAccount, error) {
+	row := q.db.QueryRowContext(ctx, createMChartOfAccount,
+		arg.OwnerID,
+		arg.Code,
+		arg.Name,
+		arg.Description,
+		arg.Category,
+		arg.Level,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i MChartOfAccount
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Code,
+		&i.Name,
+		&i.Description,
+		&i.Category,
+		&i.Level,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteMChartOfAccount = `-- name: DeleteMChartOfAccount :exec
 DELETE FROM m_chart_of_accounts
 WHERE id = $1

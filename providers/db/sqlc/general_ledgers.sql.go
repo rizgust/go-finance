@@ -7,6 +7,67 @@ import (
 	"context"
 )
 
+const createGeneralLedger = `-- name: CreateGeneralLedger :one
+INSERT INTO general_ledger_details (
+    owner_id, 
+    general_ledger_id, 
+    account_id, 
+    debit, 
+    credit, 
+    balance_before, 
+    balance, 
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
+) RETURNING id, owner_id, general_ledger_id, account_id, debit, credit, balance_before, balance, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateGeneralLedgerParams struct {
+	OwnerID         int32  `json:"owner_id"`
+	GeneralLedgerID int32  `json:"general_ledger_id"`
+	AccountID       int32  `json:"account_id"`
+	Debit           string `json:"debit"`
+	Credit          string `json:"credit"`
+	BalanceBefore   string `json:"balance_before"`
+	Balance         string `json:"balance"`
+	CreatedBy       int32  `json:"created_by"`
+	UpdatedBy       int32  `json:"updated_by"`
+}
+
+func (q *Queries) CreateGeneralLedger(ctx context.Context, arg CreateGeneralLedgerParams) (GeneralLedgerDetail, error) {
+	row := q.db.QueryRowContext(ctx, createGeneralLedger,
+		arg.OwnerID,
+		arg.GeneralLedgerID,
+		arg.AccountID,
+		arg.Debit,
+		arg.Credit,
+		arg.BalanceBefore,
+		arg.Balance,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i GeneralLedgerDetail
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.GeneralLedgerID,
+		&i.AccountID,
+		&i.Debit,
+		&i.Credit,
+		&i.BalanceBefore,
+		&i.Balance,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteGeneralLedger = `-- name: DeleteGeneralLedger :exec
 DELETE FROM general_ledger_details
 WHERE id = $1

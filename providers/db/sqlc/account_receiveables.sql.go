@@ -8,6 +8,72 @@ import (
 	"database/sql"
 )
 
+const createAccountReceiveable = `-- name: CreateAccountReceiveable :one
+INSERT INTO account_receiveables (
+    owner_id, 
+    code, 
+    "name", 
+    description, 
+    src_account_id, 
+    dst_account_id, 
+    recurring_type, 
+    recurring_periode, 
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+) RETURNING id, owner_id, code, name, description, src_account_id, dst_account_id, recurring_type, recurring_periode, user_type, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateAccountReceiveableParams struct {
+	OwnerID          int32          `json:"owner_id"`
+	Code             string         `json:"code"`
+	Name             string         `json:"name"`
+	Description      sql.NullString `json:"description"`
+	SrcAccountID     int32          `json:"src_account_id"`
+	DstAccountID     int32          `json:"dst_account_id"`
+	RecurringType    int16          `json:"recurring_type"`
+	RecurringPeriode int16          `json:"recurring_periode"`
+	CreatedBy        int32          `json:"created_by"`
+	UpdatedBy        int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateAccountReceiveable(ctx context.Context, arg CreateAccountReceiveableParams) (AccountReceiveable, error) {
+	row := q.db.QueryRowContext(ctx, createAccountReceiveable,
+		arg.OwnerID,
+		arg.Code,
+		arg.Name,
+		arg.Description,
+		arg.SrcAccountID,
+		arg.DstAccountID,
+		arg.RecurringType,
+		arg.RecurringPeriode,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i AccountReceiveable
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Code,
+		&i.Name,
+		&i.Description,
+		&i.SrcAccountID,
+		&i.DstAccountID,
+		&i.RecurringType,
+		&i.RecurringPeriode,
+		&i.UserType,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteAccountReceiveable = `-- name: DeleteAccountReceiveable :exec
 DELETE FROM account_receiveables
 WHERE id = $1

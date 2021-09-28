@@ -9,6 +9,67 @@ import (
 	"time"
 )
 
+const createMBookPeriod = `-- name: CreateMBookPeriod :one
+INSERT INTO m_book_periods (
+    owner_id, 
+    code, 
+    "name", 
+    description, 
+    status, 
+    start_date, 
+    end_date,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
+) RETURNING id, owner_id, code, name, description, status, start_date, end_date, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateMBookPeriodParams struct {
+	OwnerID     int32          `json:"owner_id"`
+	Code        sql.NullString `json:"code"`
+	Name        string         `json:"name"`
+	Description sql.NullString `json:"description"`
+	Status      int16          `json:"status"`
+	StartDate   time.Time      `json:"start_date"`
+	EndDate     time.Time      `json:"end_date"`
+	CreatedBy   int32          `json:"created_by"`
+	UpdatedBy   int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateMBookPeriod(ctx context.Context, arg CreateMBookPeriodParams) (MBookPeriod, error) {
+	row := q.db.QueryRowContext(ctx, createMBookPeriod,
+		arg.OwnerID,
+		arg.Code,
+		arg.Name,
+		arg.Description,
+		arg.Status,
+		arg.StartDate,
+		arg.EndDate,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i MBookPeriod
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Code,
+		&i.Name,
+		&i.Description,
+		&i.Status,
+		&i.StartDate,
+		&i.EndDate,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteMBookPeriod = `-- name: DeleteMBookPeriod :exec
 DELETE FROM m_book_periods
 WHERE id = $1

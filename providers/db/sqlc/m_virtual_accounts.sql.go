@@ -7,6 +7,49 @@ import (
 	"context"
 )
 
+const createMVirtualAccount = `-- name: CreateMVirtualAccount :one
+INSERT INTO m_virtual_accounts (
+    owner_id, 
+    bank_id, 
+    "number",
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5
+) RETURNING id, owner_id, bank_id, number, created_at, created_by, updated_at, updated_by
+`
+
+type CreateMVirtualAccountParams struct {
+	OwnerID   int32  `json:"owner_id"`
+	BankID    int32  `json:"bank_id"`
+	Number    string `json:"number"`
+	CreatedBy int32  `json:"created_by"`
+	UpdatedBy int32  `json:"updated_by"`
+}
+
+func (q *Queries) CreateMVirtualAccount(ctx context.Context, arg CreateMVirtualAccountParams) (MVirtualAccount, error) {
+	row := q.db.QueryRowContext(ctx, createMVirtualAccount,
+		arg.OwnerID,
+		arg.BankID,
+		arg.Number,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i MVirtualAccount
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.BankID,
+		&i.Number,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+	)
+	return i, err
+}
+
 const deleteMVirtualAccount = `-- name: DeleteMVirtualAccount :exec
 DELETE FROM m_virtual_accounts
 WHERE id = $1

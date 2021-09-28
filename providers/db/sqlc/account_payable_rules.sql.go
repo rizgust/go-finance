@@ -8,6 +8,55 @@ import (
 	"encoding/json"
 )
 
+const createAccountPayableRule = `-- name: CreateAccountPayableRule :one
+INSERT INTO account_payable_rules (
+    owner_id, 
+    ap_id, 
+    period_id,
+    "rule",
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6
+) RETURNING id, owner_id, ap_id, period_id, rule, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateAccountPayableRuleParams struct {
+	OwnerID   int32           `json:"owner_id"`
+	ApID      int32           `json:"ap_id"`
+	PeriodID  int32           `json:"period_id"`
+	Rule      json.RawMessage `json:"rule"`
+	CreatedBy int32           `json:"created_by"`
+	UpdatedBy int32           `json:"updated_by"`
+}
+
+func (q *Queries) CreateAccountPayableRule(ctx context.Context, arg CreateAccountPayableRuleParams) (AccountPayableRule, error) {
+	row := q.db.QueryRowContext(ctx, createAccountPayableRule,
+		arg.OwnerID,
+		arg.ApID,
+		arg.PeriodID,
+		arg.Rule,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i AccountPayableRule
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.ApID,
+		&i.PeriodID,
+		&i.Rule,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteAccountPayableRule = `-- name: DeleteAccountPayableRule :exec
 DELETE FROM account_payable_rules
 WHERE id = $1

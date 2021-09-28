@@ -9,6 +9,73 @@ import (
 	"time"
 )
 
+const createTrxReceive = `-- name: CreateTrxReceive :one
+INSERT INTO trx_receives (
+    owner_id, 
+    user_id, 
+    "number", 
+    amount, 
+    "date", 
+    status, 
+    description,
+    payment_method,
+    journal_id,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+) RETURNING id, owner_id, user_id, number, amount, date, status, description, payment_method, created_at, created_by, updated_at, updated_by, journal_id
+`
+
+type CreateTrxReceiveParams struct {
+	OwnerID       int32          `json:"owner_id"`
+	UserID        int32          `json:"user_id"`
+	Number        sql.NullString `json:"number"`
+	Amount        string         `json:"amount"`
+	Date          time.Time      `json:"date"`
+	Status        int16          `json:"status"`
+	Description   sql.NullString `json:"description"`
+	PaymentMethod int16          `json:"payment_method"`
+	JournalID     sql.NullInt32  `json:"journal_id"`
+	CreatedBy     int32          `json:"created_by"`
+	UpdatedBy     int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateTrxReceive(ctx context.Context, arg CreateTrxReceiveParams) (TrxReceife, error) {
+	row := q.db.QueryRowContext(ctx, createTrxReceive,
+		arg.OwnerID,
+		arg.UserID,
+		arg.Number,
+		arg.Amount,
+		arg.Date,
+		arg.Status,
+		arg.Description,
+		arg.PaymentMethod,
+		arg.JournalID,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i TrxReceife
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.UserID,
+		&i.Number,
+		&i.Amount,
+		&i.Date,
+		&i.Status,
+		&i.Description,
+		&i.PaymentMethod,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.JournalID,
+	)
+	return i, err
+}
+
 const deleteTrxReceive = `-- name: DeleteTrxReceive :exec
 DELETE FROM trx_receives
 WHERE id = $1

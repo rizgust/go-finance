@@ -8,6 +8,61 @@ import (
 	"database/sql"
 )
 
+const createTrxExpenseDetail = `-- name: CreateTrxExpenseDetail :one
+INSERT INTO trx_expense_details (
+    trx_expenses_id, 
+    amount, 
+    is_source, 
+    account_id, 
+    model, 
+    model_id,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8
+) RETURNING id, trx_expenses_id, amount, is_source, account_id, model, model_id, created_at, created_by, updated_at, updated_by
+`
+
+type CreateTrxExpenseDetailParams struct {
+	TrxExpensesID int32          `json:"trx_expenses_id"`
+	Amount        string         `json:"amount"`
+	IsSource      bool           `json:"is_source"`
+	AccountID     int32          `json:"account_id"`
+	Model         sql.NullString `json:"model"`
+	ModelID       sql.NullInt32  `json:"model_id"`
+	CreatedBy     int32          `json:"created_by"`
+	UpdatedBy     int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateTrxExpenseDetail(ctx context.Context, arg CreateTrxExpenseDetailParams) (TrxExpenseDetail, error) {
+	row := q.db.QueryRowContext(ctx, createTrxExpenseDetail,
+		arg.TrxExpensesID,
+		arg.Amount,
+		arg.IsSource,
+		arg.AccountID,
+		arg.Model,
+		arg.ModelID,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i TrxExpenseDetail
+	err := row.Scan(
+		&i.ID,
+		&i.TrxExpensesID,
+		&i.Amount,
+		&i.IsSource,
+		&i.AccountID,
+		&i.Model,
+		&i.ModelID,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+	)
+	return i, err
+}
+
 const deleteTrxExpenseDetail = `-- name: DeleteTrxExpenseDetail :exec
 DELETE FROM trx_expense_details
 WHERE id = $1

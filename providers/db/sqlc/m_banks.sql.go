@@ -8,6 +8,53 @@ import (
 	"database/sql"
 )
 
+const createMBank = `-- name: CreateMBank :one
+INSERT INTO m_banks (
+    owner_id, 
+    code, 
+    "name", 
+    alias,  
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6
+) RETURNING id, owner_id, code, name, alias, created_at, created_by, updated_at, updated_by
+`
+
+type CreateMBankParams struct {
+	OwnerID   int32          `json:"owner_id"`
+	Code      string         `json:"code"`
+	Name      string         `json:"name"`
+	Alias     sql.NullString `json:"alias"`
+	CreatedBy int32          `json:"created_by"`
+	UpdatedBy int32          `json:"updated_by"`
+}
+
+func (q *Queries) CreateMBank(ctx context.Context, arg CreateMBankParams) (MBank, error) {
+	row := q.db.QueryRowContext(ctx, createMBank,
+		arg.OwnerID,
+		arg.Code,
+		arg.Name,
+		arg.Alias,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i MBank
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.Code,
+		&i.Name,
+		&i.Alias,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+	)
+	return i, err
+}
+
 const deleteMBank = `-- name: DeleteMBank :exec
 DELETE FROM m_banks
 WHERE id = $1

@@ -8,6 +8,55 @@ import (
 	"encoding/json"
 )
 
+const createAccountReceiveableRule = `-- name: CreateAccountReceiveableRule :one
+INSERT INTO account_receiveable_rules (
+    owner_id, 
+    ar_id, 
+    period_id,
+    "rule",
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6
+) RETURNING id, owner_id, ar_id, period_id, rule, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
+`
+
+type CreateAccountReceiveableRuleParams struct {
+	OwnerID   int32           `json:"owner_id"`
+	ArID      int32           `json:"ar_id"`
+	PeriodID  int32           `json:"period_id"`
+	Rule      json.RawMessage `json:"rule"`
+	CreatedBy int32           `json:"created_by"`
+	UpdatedBy int32           `json:"updated_by"`
+}
+
+func (q *Queries) CreateAccountReceiveableRule(ctx context.Context, arg CreateAccountReceiveableRuleParams) (AccountReceiveableRule, error) {
+	row := q.db.QueryRowContext(ctx, createAccountReceiveableRule,
+		arg.OwnerID,
+		arg.ArID,
+		arg.PeriodID,
+		arg.Rule,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i AccountReceiveableRule
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.ArID,
+		&i.PeriodID,
+		&i.Rule,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+	)
+	return i, err
+}
+
 const deleteAccountReceiveableRule = `-- name: DeleteAccountReceiveableRule :exec
 DELETE FROM account_receiveable_rules
 WHERE id = $1

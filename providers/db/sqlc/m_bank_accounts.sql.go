@@ -7,6 +7,57 @@ import (
 	"context"
 )
 
+const createMBankAccount = `-- name: CreateMBankAccount :one
+INSERT INTO m_bank_accounts (
+    owner_id, 
+    bank_id, 
+    branch_name, 
+    "name", 
+    "number", 
+    created_by, 
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7
+) RETURNING id, owner_id, bank_id, branch_name, name, number, created_at, created_by, updated_at, updated_by
+`
+
+type CreateMBankAccountParams struct {
+	OwnerID    int32  `json:"owner_id"`
+	BankID     int32  `json:"bank_id"`
+	BranchName string `json:"branch_name"`
+	Name       string `json:"name"`
+	Number     string `json:"number"`
+	CreatedBy  int32  `json:"created_by"`
+	UpdatedBy  int32  `json:"updated_by"`
+}
+
+func (q *Queries) CreateMBankAccount(ctx context.Context, arg CreateMBankAccountParams) (MBankAccount, error) {
+	row := q.db.QueryRowContext(ctx, createMBankAccount,
+		arg.OwnerID,
+		arg.BankID,
+		arg.BranchName,
+		arg.Name,
+		arg.Number,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i MBankAccount
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.BankID,
+		&i.BranchName,
+		&i.Name,
+		&i.Number,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+	)
+	return i, err
+}
+
 const deleteMBankAccount = `-- name: DeleteMBankAccount :exec
 DELETE FROM m_bank_accounts
 WHERE id = $1

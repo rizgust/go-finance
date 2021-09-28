@@ -11,6 +11,135 @@ import (
 	"github.com/tabbed/pqtype"
 )
 
+const createInvoice = `-- name: CreateInvoice :one
+INSERT INTO invoices (
+    owner_id, 
+    user_id, 
+    "number", 
+    ar_id, 
+    status, 
+    amount, 
+    amount_paid, 
+    "date", 
+    due_date, 
+    additional_info, 
+    payment_id, 
+    discount_id, 
+    period_id, 
+    class_program_id, 
+    class_level_id, 
+    class_specialization_id, 
+    male, 
+    recurring_type, 
+    recurring_period, 
+    installment, 
+    mutation, 
+    boarding, 
+    admission_line_id, 
+    admission_batch_id,
+    created_by,
+    updated_by
+) 
+VALUES(
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26
+) RETURNING id, owner_id, user_id, number, ar_id, status, amount, amount_paid, date, due_date, additional_info, payment_id, discount_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by, period_id, class_program_id, class_level_id, class_specialization_id, male, recurring_type, recurring_period, installment, mutation, boarding, admission_line_id, admission_batch_id
+`
+
+type CreateInvoiceParams struct {
+	OwnerID               int32                 `json:"owner_id"`
+	UserID                int32                 `json:"user_id"`
+	Number                string                `json:"number"`
+	ArID                  int32                 `json:"ar_id"`
+	Status                int16                 `json:"status"`
+	Amount                string                `json:"amount"`
+	AmountPaid            string                `json:"amount_paid"`
+	Date                  time.Time             `json:"date"`
+	DueDate               time.Time             `json:"due_date"`
+	AdditionalInfo        pqtype.NullRawMessage `json:"additional_info"`
+	PaymentID             sql.NullInt32         `json:"payment_id"`
+	DiscountID            sql.NullInt32         `json:"discount_id"`
+	PeriodID              sql.NullInt32         `json:"period_id"`
+	ClassProgramID        sql.NullInt32         `json:"class_program_id"`
+	ClassLevelID          sql.NullInt32         `json:"class_level_id"`
+	ClassSpecializationID sql.NullInt32         `json:"class_specialization_id"`
+	Male                  sql.NullBool          `json:"male"`
+	RecurringType         int16                 `json:"recurring_type"`
+	RecurringPeriod       int16                 `json:"recurring_period"`
+	Installment           int16                 `json:"installment"`
+	Mutation              sql.NullBool          `json:"mutation"`
+	Boarding              sql.NullBool          `json:"boarding"`
+	AdmissionLineID       int16                 `json:"admission_line_id"`
+	AdmissionBatchID      int16                 `json:"admission_batch_id"`
+	CreatedBy             int32                 `json:"created_by"`
+	UpdatedBy             int32                 `json:"updated_by"`
+}
+
+func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (Invoice, error) {
+	row := q.db.QueryRowContext(ctx, createInvoice,
+		arg.OwnerID,
+		arg.UserID,
+		arg.Number,
+		arg.ArID,
+		arg.Status,
+		arg.Amount,
+		arg.AmountPaid,
+		arg.Date,
+		arg.DueDate,
+		arg.AdditionalInfo,
+		arg.PaymentID,
+		arg.DiscountID,
+		arg.PeriodID,
+		arg.ClassProgramID,
+		arg.ClassLevelID,
+		arg.ClassSpecializationID,
+		arg.Male,
+		arg.RecurringType,
+		arg.RecurringPeriod,
+		arg.Installment,
+		arg.Mutation,
+		arg.Boarding,
+		arg.AdmissionLineID,
+		arg.AdmissionBatchID,
+		arg.CreatedBy,
+		arg.UpdatedBy,
+	)
+	var i Invoice
+	err := row.Scan(
+		&i.ID,
+		&i.OwnerID,
+		&i.UserID,
+		&i.Number,
+		&i.ArID,
+		&i.Status,
+		&i.Amount,
+		&i.AmountPaid,
+		&i.Date,
+		&i.DueDate,
+		&i.AdditionalInfo,
+		&i.PaymentID,
+		&i.DiscountID,
+		&i.CreatedAt,
+		&i.CreatedBy,
+		&i.UpdatedAt,
+		&i.UpdatedBy,
+		&i.DeletedAt,
+		&i.DeletedBy,
+		&i.PeriodID,
+		&i.ClassProgramID,
+		&i.ClassLevelID,
+		&i.ClassSpecializationID,
+		&i.Male,
+		&i.RecurringType,
+		&i.RecurringPeriod,
+		&i.Installment,
+		&i.Mutation,
+		&i.Boarding,
+		&i.AdmissionLineID,
+		&i.AdmissionBatchID,
+	)
+	return i, err
+}
+
 const deleteInvoice = `-- name: DeleteInvoice :exec
 DELETE FROM invoices
 WHERE id = $1
