@@ -1,3 +1,4 @@
+-- name: CreateJournalDetail :one
 INSERT INTO journal_details (
     owner_id, 
     account_id, 

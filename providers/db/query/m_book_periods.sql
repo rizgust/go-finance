@@ -1,3 +1,4 @@
+-- name: CreateMBookPeriod :one
 INSERT INTO m_book_periods (
     owner_id, 
     code, 

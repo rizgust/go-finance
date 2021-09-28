@@ -1,3 +1,4 @@
+-- name: CreateTrxExpense :one
 INSERT INTO trx_expenses (
     owner_id, 
     user_id, 

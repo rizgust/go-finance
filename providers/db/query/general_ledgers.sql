@@ -1,3 +1,4 @@
+-- name: CreateGeneralLedger :one
 INSERT INTO general_ledger_details (
     owner_id, 
     general_ledger_id, 

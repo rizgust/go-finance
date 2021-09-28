@@ -1,3 +1,4 @@
+-- name: CreateJournal :one
 INSERT INTO journals (
     owner_id, 
     "number", 

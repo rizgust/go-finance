@@ -1,3 +1,4 @@
+-- name: CreateWallet :one
 INSERT INTO wallets (
     owner_id, 
     user_id, 

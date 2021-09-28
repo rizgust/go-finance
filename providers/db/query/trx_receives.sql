@@ -1,3 +1,4 @@
+-- name: CreateTrxReceive :one
 INSERT INTO trx_receives (
     owner_id, 
     user_id, 

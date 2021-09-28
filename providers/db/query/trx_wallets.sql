@@ -1,3 +1,4 @@
+-- name: CreateTrxWallet :one
 INSERT INTO trx_wallets (
     wallet_id, 
     amount, 

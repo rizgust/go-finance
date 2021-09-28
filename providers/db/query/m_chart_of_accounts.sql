@@ -1,3 +1,4 @@
+-- name: CreateMChartOfAccount :one
 INSERT INTO m_chart_of_accounts (
     owner_id, 
     code, 

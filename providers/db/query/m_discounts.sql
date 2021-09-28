@@ -1,3 +1,4 @@
+-- name: CreateMDiscount :one
 INSERT INTO m_discounts (
     owner_id, 
     code, 

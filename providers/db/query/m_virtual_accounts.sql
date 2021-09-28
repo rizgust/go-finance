@@ -1,3 +1,4 @@
+-- name: CreateMVirtualAccount :one
 INSERT INTO m_virtual_accounts (
     owner_id, 
     bank_id, 

@@ -1,3 +1,4 @@
+-- name: CreateTrxBankTransfer :one
 INSERT INTO trx_bank_transfers (
     owner_id, 
     user_id, 

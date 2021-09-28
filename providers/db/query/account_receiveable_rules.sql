@@ -1,3 +1,4 @@
+-- name: CreateAccountReceiveableRule :one
 INSERT INTO account_receiveable_rules (
     owner_id, 
     ar_id, 

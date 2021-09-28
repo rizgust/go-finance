@@ -1,3 +1,4 @@
+-- name: CreateAccountPayable :one
 INSERT INTO account_payables (
     owner_id, 
     code, 

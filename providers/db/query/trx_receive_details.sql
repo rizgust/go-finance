@@ -1,3 +1,4 @@
+-- name: CreateTrxReceiveDetail :one
 INSERT INTO trx_receive_details (
     trx_receives_id, 
     amount, 

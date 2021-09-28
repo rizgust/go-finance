@@ -1,3 +1,4 @@
+-- name: CreateMBankAccount :one
 INSERT INTO m_bank_accounts (
     owner_id, 
     bank_id, 

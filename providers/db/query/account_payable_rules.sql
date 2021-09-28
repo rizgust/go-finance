@@ -1,3 +1,4 @@
+-- name: CreateAccountPayableRule :one
 INSERT INTO account_payable_rules (
     owner_id, 
     ap_id, 

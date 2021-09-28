@@ -1,3 +1,4 @@
+-- name: CreateAccountReceiveable :one
 INSERT INTO account_receiveables (
     owner_id, 
     code, 

@@ -1,3 +1,4 @@
+-- name: CreatePurchase :one
 INSERT INTO purchases (
     owner_id, 
     user_id, 

@@ -1,3 +1,4 @@
+-- name: CreateInvoice :one
 INSERT INTO invoices (
     owner_id, 
     user_id, 
