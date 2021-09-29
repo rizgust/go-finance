@@ -12,7 +12,8 @@ CREATE TABLE "m_chart_of_accounts" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, code, name)
 );
 
 CREATE TABLE "m_banks" (
@@ -25,7 +26,8 @@ CREATE TABLE "m_banks" (
    "created_by" INT NOT NULL,
    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
    "updated_by" INT NOT NULL,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, code, name)
 );
 
 CREATE TABLE "m_bank_accounts" (
@@ -39,7 +41,8 @@ CREATE TABLE "m_bank_accounts" (
    "created_by" INT NOT NULL,
    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
    "updated_by" INT NOT NULL,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, bank_id, branch_name)
 );
 
 CREATE TABLE "m_virtual_accounts" (
@@ -51,7 +54,8 @@ CREATE TABLE "m_virtual_accounts" (
    "created_by" INT NOT NULL,
    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
    "updated_by" INT NOT NULL,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, bank_id, number)
 );
 
 CREATE TABLE "m_discounts" (
@@ -71,8 +75,7 @@ CREATE TABLE "m_discounts" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
-);
+   PRIMARY KEY ("id"));
 
 CREATE TABLE "m_book_periods" (
    "id" SERIAL NOT NULL,
@@ -89,7 +92,8 @@ CREATE TABLE "m_book_periods" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, name, start_date, end_date)
 );
 
 CREATE TABLE "account_payables" (
@@ -108,7 +112,8 @@ CREATE TABLE "account_payables" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, code, src_account_id, dst_account_id)
 );
 
 CREATE TABLE "account_receiveables" (
@@ -128,7 +133,8 @@ CREATE TABLE "account_receiveables" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, code, src_account_id, dst_account_id)
 );
 
 CREATE TABLE "invoices" (
@@ -163,7 +169,8 @@ CREATE TABLE "invoices" (
    "boarding" BOOLEAN,
    "admission_line_id" SMALLINT,
    "admission_batch_id" SMALLINT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, user_id, number)
 );
 
 CREATE TABLE "trx_receives" (
@@ -201,7 +208,8 @@ CREATE TABLE "wallets" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, user_id, code)
 );
 
 CREATE TABLE "trx_receive_details" (
@@ -291,7 +299,8 @@ CREATE TABLE "account_receiveable_rules" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, ar_id, period_id)
 );
 
 CREATE TABLE "general_ledgers" (
@@ -338,7 +347,8 @@ CREATE TABLE "account_payable_rules" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, ap_id, period_id)
 );
 
 CREATE TABLE "trx_expenses" (
@@ -395,7 +405,8 @@ CREATE TABLE "purchases" (
    "updated_by" INT NOT NULL,
    "deleted_at" TIMESTAMPTZ,
    "deleted_by" INT,
-   PRIMARY KEY ("id")
+   PRIMARY KEY ("id"),
+	UNIQUE (owner_id, user_id, number)
 );
 
 CREATE TABLE "general_ledger_details" (
