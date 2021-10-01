@@ -75,12 +75,20 @@ func (q *Queries) CreateAccountReceiveable(ctx context.Context, arg CreateAccoun
 }
 
 const deleteAccountReceiveable = `-- name: DeleteAccountReceiveable :exec
-DELETE FROM account_receiveables
+UPDATE account_receiveables
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, code, name, description, src_account_id, dst_account_id, recurring_type, recurring_periode, user_type, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteAccountReceiveable(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteAccountReceiveable, id)
+type DeleteAccountReceiveableParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteAccountReceiveable(ctx context.Context, arg DeleteAccountReceiveableParams) error {
+	_, err := q.db.ExecContext(ctx, deleteAccountReceiveable, arg.ID, arg.DeletedBy)
 	return err
 }
 

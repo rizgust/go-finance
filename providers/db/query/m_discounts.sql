@@ -49,5 +49,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteMDiscount :exec
-DELETE FROM m_discounts
-WHERE id = $1;
+UPDATE m_discounts
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

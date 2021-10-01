@@ -79,12 +79,20 @@ func (q *Queries) CreateJournal(ctx context.Context, arg CreateJournalParams) (J
 }
 
 const deleteJournal = `-- name: DeleteJournal :exec
-DELETE FROM journals
+UPDATE journals
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, number, date, general_ledger_id, status, amount, description, reff_model, reff_model_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteJournal(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteJournal, id)
+type DeleteJournalParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteJournal(ctx context.Context, arg DeleteJournalParams) error {
+	_, err := q.db.ExecContext(ctx, deleteJournal, arg.ID, arg.DeletedBy)
 	return err
 }
 

@@ -47,5 +47,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteAccountReceiveable :exec
-DELETE FROM account_receiveables
-WHERE id = $1;
+UPDATE account_receiveables
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

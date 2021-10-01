@@ -57,5 +57,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeletePurchase :exec
-DELETE FROM purchases
-WHERE id = $1;
+UPDATE purchases
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

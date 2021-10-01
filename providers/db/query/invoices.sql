@@ -79,5 +79,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteInvoice :exec
-DELETE FROM invoices
-WHERE id = $1;
+UPDATE invoices
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

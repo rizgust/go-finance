@@ -49,5 +49,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteWallet :exec
-DELETE FROM wallets
-WHERE id = $1;
+UPDATE wallets
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

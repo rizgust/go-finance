@@ -43,5 +43,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteJournalDetail :exec
-DELETE FROM journal_details
-WHERE id = $1;
+UPDATE journal_details
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

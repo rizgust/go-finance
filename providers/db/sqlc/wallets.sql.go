@@ -80,12 +80,20 @@ func (q *Queries) CreateWallet(ctx context.Context, arg CreateWalletParams) (Wal
 }
 
 const deleteWallet = `-- name: DeleteWallet :exec
-DELETE FROM wallets
+UPDATE wallets
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, user_id, code, name, alias, balance, account_id, other_info, allow_minus, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteWallet(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteWallet, id)
+type DeleteWalletParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteWallet(ctx context.Context, arg DeleteWalletParams) error {
+	_, err := q.db.ExecContext(ctx, deleteWallet, arg.ID, arg.DeletedBy)
 	return err
 }
 

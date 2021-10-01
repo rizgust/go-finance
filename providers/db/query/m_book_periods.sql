@@ -45,5 +45,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteMBookPeriod :exec
-DELETE FROM m_book_periods
-WHERE id = $1;
+UPDATE m_book_periods
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

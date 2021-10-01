@@ -5,6 +5,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 const createGeneralLedger = `-- name: CreateGeneralLedger :one
@@ -69,12 +70,20 @@ func (q *Queries) CreateGeneralLedger(ctx context.Context, arg CreateGeneralLedg
 }
 
 const deleteGeneralLedger = `-- name: DeleteGeneralLedger :exec
-DELETE FROM general_ledger_details
+UPDATE general_ledger_details
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, general_ledger_id, account_id, debit, credit, balance_before, balance, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteGeneralLedger(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteGeneralLedger, id)
+type DeleteGeneralLedgerParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteGeneralLedger(ctx context.Context, arg DeleteGeneralLedgerParams) error {
+	_, err := q.db.ExecContext(ctx, deleteGeneralLedger, arg.ID, arg.DeletedBy)
 	return err
 }
 

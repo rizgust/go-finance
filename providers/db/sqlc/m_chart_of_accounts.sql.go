@@ -66,12 +66,20 @@ func (q *Queries) CreateMChartOfAccount(ctx context.Context, arg CreateMChartOfA
 }
 
 const deleteMChartOfAccount = `-- name: DeleteMChartOfAccount :exec
-DELETE FROM m_chart_of_accounts
+UPDATE m_chart_of_accounts
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, code, name, description, category, level, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteMChartOfAccount(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteMChartOfAccount, id)
+type DeleteMChartOfAccountParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteMChartOfAccount(ctx context.Context, arg DeleteMChartOfAccountParams) error {
+	_, err := q.db.ExecContext(ctx, deleteMChartOfAccount, arg.ID, arg.DeletedBy)
 	return err
 }
 

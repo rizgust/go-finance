@@ -43,5 +43,8 @@ WHERE id = $1
 RETURNING *;
 
 -- name: DeleteMChartOfAccount :exec
-DELETE FROM m_chart_of_accounts
-WHERE id = $1;
+UPDATE m_chart_of_accounts
+SET deleted_at=now(),
+    deleted_by=$2
+WHERE id = $1
+RETURNING *;

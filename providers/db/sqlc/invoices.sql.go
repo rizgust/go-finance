@@ -141,12 +141,20 @@ func (q *Queries) CreateInvoice(ctx context.Context, arg CreateInvoiceParams) (I
 }
 
 const deleteInvoice = `-- name: DeleteInvoice :exec
-DELETE FROM invoices
+UPDATE invoices
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, user_id, number, ar_id, status, amount, amount_paid, date, due_date, additional_info, payment_id, discount_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by, period_id, class_program_id, class_level_id, class_specialization_id, male, recurring_type, recurring_period, installment, mutation, boarding, admission_line_id, admission_batch_id
 `
 
-func (q *Queries) DeleteInvoice(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteInvoice, id)
+type DeleteInvoiceParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteInvoice(ctx context.Context, arg DeleteInvoiceParams) error {
+	_, err := q.db.ExecContext(ctx, deleteInvoice, arg.ID, arg.DeletedBy)
 	return err
 }
 

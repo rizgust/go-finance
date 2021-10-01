@@ -71,12 +71,20 @@ func (q *Queries) CreateMBookPeriod(ctx context.Context, arg CreateMBookPeriodPa
 }
 
 const deleteMBookPeriod = `-- name: DeleteMBookPeriod :exec
-DELETE FROM m_book_periods
+UPDATE m_book_periods
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, code, name, description, status, start_date, end_date, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteMBookPeriod(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteMBookPeriod, id)
+type DeleteMBookPeriodParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteMBookPeriod(ctx context.Context, arg DeleteMBookPeriodParams) error {
+	_, err := q.db.ExecContext(ctx, deleteMBookPeriod, arg.ID, arg.DeletedBy)
 	return err
 }
 

@@ -5,6 +5,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 )
 
@@ -58,12 +59,20 @@ func (q *Queries) CreateAccountReceiveableRule(ctx context.Context, arg CreateAc
 }
 
 const deleteAccountReceiveableRule = `-- name: DeleteAccountReceiveableRule :exec
-DELETE FROM account_receiveable_rules
+UPDATE account_receiveable_rules
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, ar_id, period_id, rule, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteAccountReceiveableRule(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteAccountReceiveableRule, id)
+type DeleteAccountReceiveableRuleParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteAccountReceiveableRule(ctx context.Context, arg DeleteAccountReceiveableRuleParams) error {
+	_, err := q.db.ExecContext(ctx, deleteAccountReceiveableRule, arg.ID, arg.DeletedBy)
 	return err
 }
 

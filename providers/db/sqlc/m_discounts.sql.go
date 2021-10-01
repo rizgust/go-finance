@@ -78,12 +78,20 @@ func (q *Queries) CreateMDiscount(ctx context.Context, arg CreateMDiscountParams
 }
 
 const deleteMDiscount = `-- name: DeleteMDiscount :exec
-DELETE FROM m_discounts
+UPDATE m_discounts
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, code, name, description, is_active, value, is_percent, start_date, end_date, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeleteMDiscount(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteMDiscount, id)
+type DeleteMDiscountParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeleteMDiscount(ctx context.Context, arg DeleteMDiscountParams) error {
+	_, err := q.db.ExecContext(ctx, deleteMDiscount, arg.ID, arg.DeletedBy)
 	return err
 }
 

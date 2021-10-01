@@ -97,12 +97,20 @@ func (q *Queries) CreatePurchase(ctx context.Context, arg CreatePurchaseParams) 
 }
 
 const deletePurchase = `-- name: DeletePurchase :exec
-DELETE FROM purchases
+UPDATE purchases
+SET deleted_at=now(),
+    deleted_by=$2
 WHERE id = $1
+RETURNING id, owner_id, user_id, number, ap_id, status, amount, amount_paid, date, due_date, additional_info, period_id, expense_id, discount_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by
 `
 
-func (q *Queries) DeletePurchase(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deletePurchase, id)
+type DeletePurchaseParams struct {
+	ID        int32         `json:"id"`
+	DeletedBy sql.NullInt32 `json:"deleted_by"`
+}
+
+func (q *Queries) DeletePurchase(ctx context.Context, arg DeletePurchaseParams) error {
+	_, err := q.db.ExecContext(ctx, deletePurchase, arg.ID, arg.DeletedBy)
 	return err
 }
 
