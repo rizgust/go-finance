@@ -19,9 +19,13 @@ func NewServer(store *db.Store) *Server {
 
 func (server *Server) setupRouter() {
 	router := gin.Default()
-
-	router.POST("/master/banks", server.createMBank)
-
+	v1 := router.Group("/v1")
+	{
+		master := v1.Group("/master")
+		{
+			master.POST("/bank", server.createMBank)
+		}		
+	}
 	server.router = router
 }
 
