@@ -24,6 +24,10 @@ func (server *Server) setupRouter() {
 		master := v1.Group("/master")
 		{
 			master.POST("/bank", server.createMBank)
+			master.GET("/bank/:id", server.getMBank)
+			master.GET("/banks", server.getListMBank)
+			master.PUT("/bank", server.updateMBank)
+
 		}		
 	}
 	server.router = router
