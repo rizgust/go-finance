@@ -20,13 +20,6 @@ func (server *Server) createMBookPeriod(ctx *gin.Context ) {
 
 	arg := req
 	data, err := server.store.CreateMBookPeriod(ctx, arg)
-	// method := reflect.ValueOf(server.store).MethodByName("CreateMBookPeriod")
-	// var inputs []reflect.Value
-	// inputs = append(inputs, reflect.ValueOf(ctx))
-	// inputs = append(inputs, reflect.ValueOf(arg))
-	// outputs :=  method.Call(inputs)
-	// objectTable := reflect.ValueOf(outputs[0])
-	// err := reflect.ValueOf(outputs[1])
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {

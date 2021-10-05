@@ -20,13 +20,6 @@ func (server *Server) createMChartOfAccount(ctx *gin.Context ) {
 
 	arg := req
 	data, err := server.store.CreateMChartOfAccount(ctx, arg)
-	// method := reflect.ValueOf(server.store).MethodByName("CreateMChartOfAccount")
-	// var inputs []reflect.Value
-	// inputs = append(inputs, reflect.ValueOf(ctx))
-	// inputs = append(inputs, reflect.ValueOf(arg))
-	// outputs :=  method.Call(inputs)
-	// objectTable := reflect.ValueOf(outputs[0])
-	// err := reflect.ValueOf(outputs[1])
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
