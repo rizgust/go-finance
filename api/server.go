@@ -27,6 +27,11 @@ func (server *Server) setupRouter() {
 			master.GET("/bank/:id", server.getMBank)
 			master.GET("/banks", server.getListMBank)
 			master.PUT("/bank", server.updateMBank)
+			
+			master.POST("/bank-acc", server.createMBankAccount)
+			master.GET("/bank-acc/:id", server.getMBankAccount)
+			master.GET("/bank-accs", server.getListMBankAccount)
+			master.PUT("/bank-acc", server.updateMBankAccount)
 
 		}		
 	}
