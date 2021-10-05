@@ -52,7 +52,7 @@ func (server *Server) setupRouter() {
 			master.GET("/discount/:id", server.getMDiscount)
 			master.GET("/discount", server.getListMDiscount)
 			master.PUT("/discount", server.updateMDiscount)
-		}	
+		}
 		
 		master.POST("/ap", server.createAccountPayable)
 		master.GET("/ap/:id", server.getAccountPayable)
@@ -63,6 +63,16 @@ func (server *Server) setupRouter() {
 		master.GET("/ap-rule/:id", server.getAccountPayableRule)
 		master.GET("/ap-rule", server.getListAccountPayableRule)
 		master.PUT("/ap-rule", server.updateAccountPayableRule)
+		
+		master.POST("/ar", server.createAccountReceiveable)
+		master.GET("/ar/:id", server.getAccountReceiveable)
+		master.GET("/ar", server.getListAccountReceiveable)
+		master.PUT("/ar", server.updateAccountReceiveable)
+		
+		master.POST("/ar-rule", server.createAccountReceiveableRule)
+		master.GET("/ar-rule/:id", server.getAccountReceiveableRule)
+		master.GET("/ar-rule", server.getListAccountReceiveableRule)
+		master.PUT("/ar-rule", server.updateAccountReceiveableRule)
 	}
 	server.router = router
 }
