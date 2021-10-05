@@ -52,7 +52,12 @@ func (server *Server) setupRouter() {
 			master.GET("/discount/:id", server.getMDiscount)
 			master.GET("/discounts", server.getListMDiscount)
 			master.PUT("/discount", server.updateMDiscount)
-		}		
+		}	
+		
+		master.POST("/ap", server.createAccountPayable)
+		master.GET("/ap/:id", server.getAccountPayable)
+		master.GET("/ap", server.getListAccountPayable)
+		master.PUT("/ap", server.updateAccountPayable)
 	}
 	server.router = router
 }
