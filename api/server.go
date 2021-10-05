@@ -58,6 +58,11 @@ func (server *Server) setupRouter() {
 		master.GET("/ap/:id", server.getAccountPayable)
 		master.GET("/ap", server.getListAccountPayable)
 		master.PUT("/ap", server.updateAccountPayable)
+		
+		master.POST("/ap-rule", server.createAccountPayableRule)
+		master.GET("/ap-rule/:id", server.getAccountPayableRule)
+		master.GET("/ap-rule", server.getListAccountPayableRule)
+		master.PUT("/ap-rule", server.updateAccountPayableRule)
 	}
 	server.router = router
 }
