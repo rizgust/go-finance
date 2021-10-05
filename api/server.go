@@ -38,6 +38,10 @@ func (server *Server) setupRouter() {
 			master.GET("/book-periods", server.getListMBookPeriod)
 			master.PUT("/book-period", server.updateMBookPeriod)
 
+			master.POST("/coa", server.createMChartOfAccount)
+			master.GET("/coa/:id", server.getMChartOfAccount)
+			master.GET("/coas", server.getListMChartOfAccount)
+			master.PUT("/coa", server.updateMChartOfAccount)
 		}		
 	}
 	server.router = router
