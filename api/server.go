@@ -47,6 +47,11 @@ func (server *Server) setupRouter() {
 			master.GET("/va/:id", server.getMVirtualAccount)
 			master.GET("/vas", server.getListMVirtualAccount)
 			master.PUT("/va", server.updateMVirtualAccount)
+
+			master.POST("/discount", server.createMDiscount)
+			master.GET("/discount/:id", server.getMDiscount)
+			master.GET("/discounts", server.getListMDiscount)
+			master.PUT("/discount", server.updateMDiscount)
 		}		
 	}
 	server.router = router
