@@ -42,6 +42,11 @@ func (server *Server) setupRouter() {
 			master.GET("/coa/:id", server.getMChartOfAccount)
 			master.GET("/coas", server.getListMChartOfAccount)
 			master.PUT("/coa", server.updateMChartOfAccount)
+
+			master.POST("/va", server.createMVirtualAccount)
+			master.GET("/va/:id", server.getMVirtualAccount)
+			master.GET("/vas", server.getListMVirtualAccount)
+			master.PUT("/va", server.updateMVirtualAccount)
 		}		
 	}
 	server.router = router
