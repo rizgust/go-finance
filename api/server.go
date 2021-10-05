@@ -33,6 +33,11 @@ func (server *Server) setupRouter() {
 			master.GET("/bank-accs", server.getListMBankAccount)
 			master.PUT("/bank-acc", server.updateMBankAccount)
 
+			master.POST("/book-period", server.createMBookPeriod)
+			master.GET("/book-period/:id", server.getMBookPeriod)
+			master.GET("/book-periods", server.getListMBookPeriod)
+			master.PUT("/book-period", server.updateMBookPeriod)
+
 		}		
 	}
 	server.router = router
